@@ -226,6 +226,30 @@ mainwindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MicroclimatePanel.dir\build.make CMakeFiles/MicroclimatePanel.dir/mainwindow.cpp.s
 .PHONY : mainwindow.cpp.s
 
+qcustomplot.obj: qcustomplot.cpp.obj
+.PHONY : qcustomplot.obj
+
+# target to build an object file
+qcustomplot.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MicroclimatePanel.dir\build.make CMakeFiles/MicroclimatePanel.dir/qcustomplot.cpp.obj
+.PHONY : qcustomplot.cpp.obj
+
+qcustomplot.i: qcustomplot.cpp.i
+.PHONY : qcustomplot.i
+
+# target to preprocess a source file
+qcustomplot.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MicroclimatePanel.dir\build.make CMakeFiles/MicroclimatePanel.dir/qcustomplot.cpp.i
+.PHONY : qcustomplot.cpp.i
+
+qcustomplot.s: qcustomplot.cpp.s
+.PHONY : qcustomplot.s
+
+# target to generate assembly for a file
+qcustomplot.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MicroclimatePanel.dir\build.make CMakeFiles/MicroclimatePanel.dir/qcustomplot.cpp.s
+.PHONY : qcustomplot.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -246,6 +270,9 @@ help:
 	@echo ... mainwindow.obj
 	@echo ... mainwindow.i
 	@echo ... mainwindow.s
+	@echo ... qcustomplot.obj
+	@echo ... qcustomplot.i
+	@echo ... qcustomplot.s
 .PHONY : help
 
 

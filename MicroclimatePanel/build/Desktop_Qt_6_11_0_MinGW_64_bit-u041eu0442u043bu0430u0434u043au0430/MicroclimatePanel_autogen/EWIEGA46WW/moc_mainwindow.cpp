@@ -8,6 +8,8 @@
 
 #include "../../../../mainwindow.h"
 #include <QtNetwork/QSslError>
+#include <QtGui/qtextcursor.h>
+#include <QtGui/qscreen.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -40,20 +42,41 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "MainWindow",
-        "on_pushButton_clicked",
+        "onRefreshClicked",
         "",
+        "onPredictClicked",
+        "onVentilationClicked",
+        "onACClicked",
+        "onHealthClicked",
         "onReplyFinished",
         "QNetworkReply*",
-        "reply"
+        "reply",
+        "requestStatus",
+        "requestHistory",
+        "requestPredict"
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'on_pushButton_clicked'
+        // Slot 'onRefreshClicked'
         QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onPredictClicked'
+        QtMocHelpers::SlotData<void()>(3, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onVentilationClicked'
+        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onACClicked'
+        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onHealthClicked'
+        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onReplyFinished'
-        QtMocHelpers::SlotData<void(QNetworkReply *)>(3, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { 0x80000000 | 4, 5 },
+        QtMocHelpers::SlotData<void(QNetworkReply *)>(7, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 8, 9 },
         }}),
+        // Slot 'requestStatus'
+        QtMocHelpers::SlotData<void()>(10, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'requestHistory'
+        QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'requestPredict'
+        QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -77,15 +100,22 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     auto *_t = static_cast<MainWindow *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->on_pushButton_clicked(); break;
-        case 1: _t->onReplyFinished((*reinterpret_cast<std::add_pointer_t<QNetworkReply*>>(_a[1]))); break;
+        case 0: _t->onRefreshClicked(); break;
+        case 1: _t->onPredictClicked(); break;
+        case 2: _t->onVentilationClicked(); break;
+        case 3: _t->onACClicked(); break;
+        case 4: _t->onHealthClicked(); break;
+        case 5: _t->onReplyFinished((*reinterpret_cast<std::add_pointer_t<QNetworkReply*>>(_a[1]))); break;
+        case 6: _t->requestStatus(); break;
+        case 7: _t->requestHistory(); break;
+        case 8: _t->requestPredict(); break;
         default: ;
         }
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 1:
+        case 5:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
@@ -115,14 +145,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 9;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 9;
     }
     return _id;
 }

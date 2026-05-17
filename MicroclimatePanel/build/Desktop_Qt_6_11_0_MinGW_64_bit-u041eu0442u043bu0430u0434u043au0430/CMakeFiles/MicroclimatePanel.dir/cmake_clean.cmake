@@ -8,6 +8,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/MicroclimatePanel.dir/main.cpp.obj.d"
   "CMakeFiles/MicroclimatePanel.dir/mainwindow.cpp.obj"
   "CMakeFiles/MicroclimatePanel.dir/mainwindow.cpp.obj.d"
+  "CMakeFiles/MicroclimatePanel.dir/qcustomplot.cpp.obj"
+  "CMakeFiles/MicroclimatePanel.dir/qcustomplot.cpp.obj.d"
   "MicroclimatePanel.exe"
   "MicroclimatePanel.exe.manifest"
   "MicroclimatePanel.pdb"
