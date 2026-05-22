@@ -67,7 +67,7 @@ void add_measurement(const std::string& room, const Measurement& m) {
     if (m.temperature > 25.0 && !roomData.ac_on) {
         roomData.ac_on = true;
         std::cout << "Auto: AC ON for " << room << " (temp=" << m.temperature << ")" << std::endl;
-    } else if (m.temperature < 22.0 && roomData.ac_on) {
+    } else if (m.temperature <= 22.0 && roomData.ac_on) {
         roomData.ac_on = false;
         std::cout << "Auto: AC OFF for " << room << " (temp=" << m.temperature << ")" << std::endl;
     }
@@ -95,39 +95,107 @@ int predict_co2(const std::string& room) {
 void data_generator() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> temp_dist(20.0, 24.0);
     std::uniform_real_distribution<> hum_dist(40.0, 60.0);
     std::uniform_int_distribution<> co2_var(-5, 10);
-    int co2_value = 450;
+    std::uniform_real_distribution<> noise(-0.1, 0.1);
+
+    double co2_value = 450.0;
+    double temperature = 22.0;
+    double target_temp = 22.0;
     int counter = 0;
-    int target_co2 = 450;
-    const int step = 3;
+    double target_co2 = 450.0;
+    const double step = 3.0;
+
     while (running) {
         std::this_thread::sleep_for(std::chrono::seconds(5));
         counter++;
         bool people = (counter / 12) % 2 == 0;
-        if (people) {
-            target_co2 += 20;
-            if (target_co2 > 1200) target_co2 = 1200;
-        } else {
-            target_co2 -= 15;
-            if (target_co2 < 400) target_co2 = 400;
+
+        // Получаем состояния устройств
+        bool vent_on = false;
+        bool ac_on = false;
+        {
+            std::lock_guard<std::mutex> lock(db_mutex);
+            auto it = database.find("A101");
+            if (it != database.end()) {
+                vent_on = it->second.ventilation_on;
+                ac_on = it->second.ac_on;
+            }
         }
-        if (co2_value < target_co2) co2_value = std::min(co2_value + step, target_co2);
-        else if (co2_value > target_co2) co2_value = std::max(co2_value - step, target_co2);
-        co2_value += co2_var(gen);
-        if (co2_value < 300) co2_value = 300;
-        if (co2_value > 1300) co2_value = 1300;
-        double temp = temp_dist(gen);
-        double hum = hum_dist(gen);
+
+        // --- CO₂ с учётом вентиляции ---
+        if (vent_on) {
+            if (co2_value > 450.0) {
+                co2_value -= 12.0;
+                if (co2_value < 450.0) co2_value = 450.0;
+            } else {
+                co2_value += co2_var(gen);
+                if (co2_value < 400.0) co2_value = 400.0;
+                if (co2_value > 1300.0) co2_value = 1300.0;
+            }
+        } else {
+            if (people) {
+                target_co2 += 20.0;
+                if (target_co2 > 1200.0) target_co2 = 1200.0;
+            } else {
+                target_co2 -= 15.0;
+                if (target_co2 < 400.0) target_co2 = 400.0;
+            }
+            if (co2_value < target_co2) {
+                co2_value += step;
+                if (co2_value > target_co2) co2_value = target_co2;
+            } else if (co2_value > target_co2) {
+                co2_value -= step;
+                if (co2_value < target_co2) co2_value = target_co2;
+            }
+            co2_value += co2_var(gen);
+            if (co2_value < 300.0) co2_value = 300.0;
+            if (co2_value > 1300.0) co2_value = 1300.0;
+        }
+
+        // --- Температура с учётом кондиционера и плавной динамики ---
+        if (ac_on) {
+            // Кондиционер активно снижает температуру к 22.0
+            if (temperature > 22.0) {
+                temperature -= 0.2;
+                if (temperature < 22.0) temperature = 22.0;
+            }
+            target_temp = 22.0;
+        } else {
+            // Без кондиционера: цель медленно меняется в зависимости от присутствия людей
+            if (people) {
+                target_temp += 0.05;
+                if (target_temp > 25.0) target_temp = 25.0;
+            } else {
+                target_temp -= 0.03;
+                if (target_temp < 20.0) target_temp = 20.0;
+            }
+            // Плавное движение текущей температуры к цели
+            if (temperature < target_temp) {
+                temperature += 0.1;
+                if (temperature > target_temp) temperature = target_temp;
+            } else if (temperature > target_temp) {
+                temperature -= 0.1;
+                if (temperature < target_temp) temperature = target_temp;
+            }
+            // Добавляем малый шум
+            temperature += noise(gen);
+            if (temperature < 18.0) temperature = 18.0;
+            if (temperature > 26.0) temperature = 26.0;
+        }
+
+        double humidity = hum_dist(gen);
+
         Measurement m;
         m.time = current_time_iso();
-        m.temperature = temp;
-        m.humidity = hum;
-        m.co2 = co2_value;
+        m.temperature = temperature;
+        m.humidity = humidity;
+        m.co2 = static_cast<int>(co2_value);
         m.people_present = people;
         add_measurement("A101", m);
-        std::cout << "Generated: " << m.time << " CO2=" << co2_value << " people=" << people << std::endl;
+
+        // Опциональный вывод (можно включить для отладки)
+        // std::cout << "Generated: CO2=" << co2_value << " temp=" << temperature << " vent=" << vent_on << " ac=" << ac_on << " people=" << people << std::endl;
     }
 }
 

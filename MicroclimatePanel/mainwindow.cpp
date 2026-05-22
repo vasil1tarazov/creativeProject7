@@ -57,9 +57,13 @@ MainWindow::MainWindow(QWidget *parent)
     customPlot->yAxis2->setLabel("CO₂, ppm");
     customPlot->yAxis2->setVisible(true);
     customPlot->legend->setVisible(true);
+    customPlot->legend->setVisible(true);
+    QCPLegend *legend = customPlot->legend;
+    customPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignLeft | Qt::AlignTop);
 
-    updateTimer->start(5000);
-    statusTimer->start(3000);
+
+    updateTimer->start(2000);   // обновление истории каждые 2 секунды
+    statusTimer->start(2000);   // обновление статуса каждые 2 секунды
     requestHistory();
     requestStatus();
 }
