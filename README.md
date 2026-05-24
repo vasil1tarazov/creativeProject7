@@ -4,9 +4,9 @@
 **Группа:** РИС-25-1б  
 **Дата:** 18.05.2025
 
-**[Видео](https://disk.yandex.ru/i/QlbeDdmOVlxzSQ)**
+**[Видео](https://disk.yandex.ru/i/7Wcq81LoRXh0vg)**
 
-**[Отчёт](https://)**
+**[Отчёт](https://disk.yandex.ru/i/XpavqZCPfchsbw)**
 
 ---
 
