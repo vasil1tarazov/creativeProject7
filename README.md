@@ -6,7 +6,7 @@
 
 **[Видео](https://disk.yandex.ru/i/7Wcq81LoRXh0vg)**
 
-**[Отчёт](https://disk.yandex.ru/i/XpavqZCPfchsbw)**
+**[Отчёт](https://disk.yandex.ru/i/E2lI0WPF6L5RPw)**
 
 ---
 
